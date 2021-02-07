@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'sql311.ultimatefreehost.in',
-	'username' => 'ltm_27836540',
-	'password' => 'Brenin38@&',
-	'database' => 'ltm_27836540_reveal',
+	'hostname' => 'bnjfkzaezdb8nrilv4it-mysql.services.clever-cloud.com',
+	'username' => 'ucrdcvuxnzdgb2mx',
+	'password' => 'BYz0MZzSK7YzfiBrV2KE',
+	'database' => 'bnjfkzaezdb8nrilv4it',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
