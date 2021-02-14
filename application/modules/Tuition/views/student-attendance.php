@@ -1,6 +1,7 @@
 <link href="<?php echo base_url('assets/css/sidebar.css')?>" rel="stylesheet">
 <link href="<?php echo base_url('assets/css/admin-style-min.css')?>" rel="stylesheet">
 <link href="<?php echo base_url('assets/media/css/jquery-ui.css')?>" rel="stylesheet">
+
 </head>
 
 <body>
@@ -87,7 +88,7 @@
                         </div><br />
                         <button type="submit" name="get" class="btn btn-primary">Get</button>
                     </form>
-                    <?php if($user_data): ?>
+                    <?php if(!empty($user_data)): ?>
                     <form action="<?php echo site_url('student-attendance'); ?>" method="POST">
                         <!-- <div class="card-body"> -->
                             <div class="table-responsive">
@@ -120,8 +121,13 @@
                                             <td>
                                                 <?= $value['student_medium'] ?>
                                             </td>
-                                            <td><input type="radio" name="<?= $value['student_id'] ?>" value="Present"> Present
-                                                &nbsp;<input type="radio" name="<?= $value['student_id'] ?>" value="Absent" checked> Absent
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="status[]" checked value="<?= $value['student_id'] ?>" id="myCheck<?= $i ?>" onclick="myFunction(<?= $i ?>)">
+                                                    <div class="ml-4 ">
+                                                        <img src="<?= base_url('assets/img/present.png') ?>" id="text<?= $i ?>"  class="img-fluid" style="width: 30px">
+                                                    </div> 
+                                                </div>
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -139,6 +145,20 @@
     </div>
 
     <script>
+        function myFunction($id) {
+        
+            // Get the checkbox
+            var checkBox = document.getElementById("myCheck"+$id);
+            // Get the output text
+            var text = "text";
+
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true){
+                document.getElementById(text.concat($id)).src = "assets/img/present.png";
+            } else {
+                document.getElementById(text.concat($id)).src = "assets/img/apsent.png";
+            }
+        }
         function w3_open() {
             document.getElementById("mySidebar").style.display = "block";
         }

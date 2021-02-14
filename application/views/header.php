@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
-    <title>Login : Reveal</title>
+    <title><?php if(isset($title)){ echo $title; }else{ echo "Reveal"; } ?></title>
     <!-- Favicons -->
     <link href="<?php echo base_url('assets/img/favicon.png') ?>" rel="icon">
     <link href="<?php echo base_url('assets/img/apple-touch-icon.png') ?>" rel="apple-touch-icon">

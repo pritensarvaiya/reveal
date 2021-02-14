@@ -81,7 +81,7 @@
                         </div><br />
                         <button type="submit" name="get" class="btn btn-primary">Get</button>
                     </form>
-                    <?php if($attendance_data): ?>
+                    <?php if($student_data): ?>
                     <div class="card my-5">
                         <div class="card-header">
                             <ul class="nav nav-pills card-header-pills">
@@ -95,30 +95,34 @@
                                         <tr>
                                             <th>Sr.no</th>
                                             <th>Student Name</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
+                                            <th>Gender</th>
+                                            <th>Number</th>
+                                            <th>Attendance %</th>
+                                            <th>View</th>
                                         </tr>
 
                                     </thead>
                                     <tbody>
                                         <?php $i=1; ?>
-                                        <?php  foreach ($attendance_data as $value) { ?>
+                                        <?php  foreach ($student_data as $value) { ?>
                                             <tr>
                                                 <td>
                                                     <?php echo $i; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $value['student_name']; ?>
+                                                    <?php echo $value['student_fname'].' '.$value['student_lname']; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $value['student_class'].' '.$value['student_medium']; ?>
+                                                    <?php echo $value['student_gender']; ?>
                                                 </td>
                                                 <td>
-                                                    <font <?php if($value['attendance_status'] == 'Present') { echo "color='green'";}elseif($value['attendance_status'] == 'Absent') { echo "color='red'";}?>><?php echo $value['attendance_status']; ?></font>
+                                                    <?php echo $value['student_number']; ?>
                                                 </td>
                                                 <td>
-                                                    <?php $value['date']=date_create($value['date']); echo date_format($value['date'],"d-m-Y"); ?>
+                                                    <?php if($value['total_days']==0){echo '0';}else{echo round((100*$value['present_days'])/$value['total_days'],2);} ?>
+                                                </td>
+                                                <td>
+                                                    <a href="Tuition/viewattendance/<?=$value['student_id']?>"><img src="<?= base_url('assets/img/view.png') ?>" class="img-fluid" style="width: 40px"></a>
                                                 </td>
                                             </tr>
                                         <?php $i++; ?>

@@ -12,7 +12,8 @@ class Student extends MX_Controller {
 		if($this->session->has_userdata('student_id')) {
 			
 			$data['student_data'] = $this->Student_model->fatchOne('tuition_student','student_id',$this->session->userdata('student_id'));
-			$this->load->view('header');
+			$temp['title'] = 'Student dashboard';
+			$this->load->view('header',$temp);
 			$this->load->view('student-dashboard',$data);
 			$this->load->view('footer');
 		}
@@ -44,7 +45,8 @@ class Student extends MX_Controller {
 			}
 		}
 		else {
-			$this->load->view('header');
+			$temp['title'] = 'Student Login';
+			$this->load->view('header',$temp);
         	$this->load->view('student-login');
         	$this->load->view('footer');
 		}
@@ -57,7 +59,8 @@ class Student extends MX_Controller {
 		else { 
 			$user_data = $this->Student_model->fatchOne('tuition_student','student_id',$this->session->userdata('student_id'));
 			$data['student_data'] = $user_data;
-			$this->load->view('header');
+			$temp['title'] = 'Student Dashboard';
+			$this->load->view('header',$temp);
 			$this->load->view('student-dashboard',$data);
 			$this->load->view('footer');
 		}
@@ -78,7 +81,8 @@ class Student extends MX_Controller {
 			$this->form_validation->set_rules('city','City','trim|required');
 			
 			if($this->form_validation->run() == FALSE){
-			  $this->load->view('header');
+			  $temp['title'] = 'Edit Student Profile';
+			  $this->load->view('header',$temp);
 			  $this->load->view('student/edit-student-profile');
 			  $this->load->view('footer');
 			}
@@ -103,7 +107,8 @@ class Student extends MX_Controller {
 		}
 		else {
 			$data = $this->Student_model->fatchOne('tuition_student','student_id',$this->session->userdata('student_id'));
-			$this->load->view('header');
+			$temp['title'] = 'Edit Tuition Student';
+			$this->load->view('header',$temp);
 			$this->load->view('edit-tuition-student',$data);
 			$this->load->view('footer');
 		}
@@ -114,8 +119,9 @@ class Student extends MX_Controller {
 			redirect('student/student-sign-in');
 		}
 		else {
-			$data['attendance_data'] = $this->Student_model->myQuery("SELECT `attendance_status`,`date` FROM `student_attendance` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `student_id`=".$this->session->userdata('student_id')." ORDER BY date desc");
-			$this->load->view('header'); 
+			$data = $this->Student_model->fatchOne('tuition_student','student_id',$this->session->userdata('student_id'));
+			$temp['title'] = 'View Student Attendance';
+			$this->load->view('header',$temp); 
 			$this->load->view('view-student-attendance',$data);
 			$this->load->view('footer');
 		}
@@ -143,7 +149,8 @@ class Student extends MX_Controller {
 		else {
 			$student_data = $this->Student_model->fatchOne('tuition_student','student_id',$this->session->userdata('student_id'));
 			$data['announcement_data'] = $this->Student_model->myQuery("SELECT `announcements_id`,`title`,`message`,`timestamp` FROM `announcements` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `send_to`='".$student_data['student_class']."' AND `medium`='".$student_data['student_medium']."' ORDER BY timestamp");
-			$this->load->view('header');
+			$temp['title'] = 'View Announcement';
+			$this->load->view('header',$temp);
 			$this->load->view('view-announcement',$data);
 			$this->load->view('footer');
 		}
@@ -155,7 +162,8 @@ class Student extends MX_Controller {
 		}
 		else {
 			$data = $this->Student_model->fatchOne('announcements','announcements_id',$id);
-			$this->load->view('header');
+			$temp['title'] = 'Announcement';
+			$this->load->view('header',$temp);
 			$this->load->view('announcement',$data);
 			$this->load->view('footer');
 		}
@@ -182,7 +190,8 @@ class Student extends MX_Controller {
         }
         else {
 
-          $this->load->view('header'); 
+			$temp['title'] = 'Student Query';
+			$this->load->view('header',$temp); 
           $this->load->view('student-query');
           $this->load->view('footer');
 		}
@@ -201,7 +210,8 @@ class Student extends MX_Controller {
             $this->form_validation->set_rules('conf_new_password', 'Confirm Password', 'trim|required|matches[new_password]');
             
             if($this->form_validation->run() == FALSE){
-              $this->load->view('header');
+				$temp['title'] = 'Change Password';
+				$this->load->view('header',$temp);
               $this->load->view('change-password');
               $this->load->view('footer');
             }
@@ -223,7 +233,8 @@ class Student extends MX_Controller {
             }
         }
         else {
-            $this->load->view('header'); 
+			$temp['title'] = 'Change Password';
+			$this->load->view('header',$temp); 
             $this->load->view('change-password');
             $this->load->view('footer');
         }

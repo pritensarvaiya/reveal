@@ -13,7 +13,14 @@ class Tuition extends MX_Controller {
 	public function index() {
 		if($this->session->has_userdata('id')) {
 			$user_data = $this->Tuition_model->fatchOne('tuition_head','tuition_id',$this->session->userdata('id'));
-			$this->load->view('header');
+			$class = $this->Tuition_model->myQuery('SELECT `class_name` FROM `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id'));
+			$teacher = $this->Tuition_model->myQuery('SELECT `teacher_fname` FROM `tuition_teacher` WHERE `tuition_id`='.$this->session->userdata('id'));
+			$student = $this->Tuition_model->myQuery('SELECT `student_fname` FROM `tuition_student` WHERE `tuition_id`='.$this->session->userdata('id'));
+			$user_data['class'] = sizeof($class);
+			$user_data['teacher'] = sizeof($teacher);
+			$user_data['student'] = sizeof($student);
+			$temp['title'] = 'Tuition Dashboard';
+			$this->load->view('header',$temp);
 			$this->load->view('tuition-dashboard',$user_data);
 			$this->load->view('footer');
 		}
@@ -43,15 +50,23 @@ class Tuition extends MX_Controller {
 			}
 		}
 		else {
+			$temp['title'] = 'Tuition Login';
 			$this->load->view('header');
-			$this->load->view('tuition-login');
+			$this->load->view('tuition-login',$temp);
 			$this->load->view('footer');
 		}
 	}
 	public function register() {
 		if($this->session->has_userdata('id')) {
 			$user_data = $this->Tuition_model->fatchOne('tuition_head','tuition_id',$this->session->userdata('id'));
-			$this->load->view('header');
+			$class = $this->Tuition_model->myQuery('SELECT `class_name` FROM `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id'));
+			$teacher = $this->Tuition_model->myQuery('SELECT `teacher_fname` FROM `tuition_teacher` WHERE `tuition_id`='.$this->session->userdata('id'));
+			$student = $this->Tuition_model->myQuery('SELECT `student_fname` FROM `tuition_student` WHERE `tuition_id`='.$this->session->userdata('id'));
+			$user_data['class'] = sizeof($class);
+			$user_data['teacher'] = sizeof($teacher);
+			$user_data['student'] = sizeof($student);
+			$temp['title'] = 'Tuition Dashboard';
+			$this->load->view('header',$temp);
 			$this->load->view('tuition-dashboard',$user_data);
 			$this->load->view('footer');
 		}
@@ -68,7 +83,8 @@ class Tuition extends MX_Controller {
 			$this->form_validation->set_rules('city','City','trim|required');
 			
 			if($this->form_validation->run() == FALSE){
-				$this->load->view('header');
+				$temp['title'] = 'Tuition Register';
+				$this->load->view('header',$temp);
 				$this->load->view('tuition-register');
 				$this->load->view('footer');
 			}
@@ -93,7 +109,8 @@ class Tuition extends MX_Controller {
 			}
 		}
 		else {
-			$this->load->view('header');
+			$temp['title'] = 'Tuition Register';
+			$this->load->view('header',$temp);
 			$this->load->view('tuition-register');
 			$this->load->view('footer');
 		}
@@ -108,7 +125,8 @@ class Tuition extends MX_Controller {
 				$user_data['class'] = sizeof($class);
 				$user_data['teacher'] = sizeof($teacher);
 				$user_data['student'] = sizeof($student);
-				$this->load->view('header'); 
+				$temp['title'] = 'Tuition Dashboard';
+				$this->load->view('header',$temp); 
 				$this->load->view('tuition-dashboard',$user_data);
 				$this->load->view('footer');
 			}
@@ -133,7 +151,8 @@ class Tuition extends MX_Controller {
 			
 			if($this->form_validation->run() == FALSE){
 				$user_data = $this->Tuition_model->fatchOne('tuition_head','tuition_id',$this->session->userdata('id'));
-				$this->load->view('header');
+				$temp['title'] = 'Edit Tuition Profile';
+				$this->load->view('header',$temp);
 				$this->load->view('edit-tuition-profile',$user_data);
 				$this->load->view('footer');
 			}
@@ -157,7 +176,8 @@ class Tuition extends MX_Controller {
 		}
 		else {
 			$user_data = $this->Tuition_model->fatchOne('tuition_head','tuition_id',$this->session->userdata('id'));
-			$this->load->view('header'); 
+			$temp['title'] = 'Edit Tuition Profile';
+			$this->load->view('header',$temp); 
 			$this->load->view('edit-tuition-profile',$user_data);
 			$this->load->view('footer');
 		}
@@ -189,7 +209,8 @@ class Tuition extends MX_Controller {
 			$this->form_validation->set_rules('conf_new_password', 'Confirm Password', 'trim|required|matches[new_password]');
 			
 			if($this->form_validation->run() == FALSE){
-				$this->load->view('header');
+				$temp['title'] = 'Change Password';
+				$this->load->view('header',$temp);
 				$this->load->view('change-password');
 				$this->load->view('footer');
 			}
@@ -211,7 +232,8 @@ class Tuition extends MX_Controller {
 			}
 		}
 		else {
-			$this->load->view('header'); 
+			$temp['title'] = 'Change Password';
+			$this->load->view('header',$temp); 
 			$this->load->view('change-password');
 			$this->load->view('footer');
 		}
@@ -224,7 +246,8 @@ class Tuition extends MX_Controller {
 		else {
 			$user_data = $this->Tuition_model->myQuery('SELECT * From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id'));
 			$data["class_data"] = $user_data;
-			$this->load->view('header'); 
+			$temp['title'] = 'Tuition Classes';
+			$this->load->view('header',$temp); 
 			$this->load->view('tuition-classes',$data);
 			$this->load->view('footer');
 		}
@@ -242,7 +265,8 @@ class Tuition extends MX_Controller {
 			$this->form_validation->set_rules('medium','Medium','required');
 
 			if($this->form_validation->run() == FALSE){
-				$this->load->view('header');
+				$temp['title'] = 'Add Tuition Classes';
+				$this->load->view('header',$temp);
 				$this->load->view('add-tuition-classes');
 				$this->load->view('footer');
 			}
@@ -264,8 +288,8 @@ class Tuition extends MX_Controller {
 				}
 			}
 		}
-		else {
-			$this->load->view('header'); 
+		else {$temp['title'] = 'Add Tuition Classes';
+			$this->load->view('header',$temp); 
 			$this->load->view('add-tuition-classes');
 			$this->load->view('footer');
 		}
@@ -277,7 +301,8 @@ class Tuition extends MX_Controller {
 		}
 		else {
 			$data = $this->Tuition_model->fatchOne('tuition_class','id',$id);
-			$this->load->view('header'); 
+			$temp['title'] = 'Update Class';
+			$this->load->view('header',$temp);
 			$this->load->view('update-class',$data);
 			$this->load->view('footer');
 		}
@@ -292,7 +317,8 @@ class Tuition extends MX_Controller {
 			$this->form_validation->set_rules('fees','Fees','trim|required');
 
 			if($this->form_validation->run() == FALSE){
-				$this->load->view('header');
+				$temp['title'] = 'Update Class';
+				$this->load->view('header',$temp);
 				$this->load->view('update-class');
 				$this->load->view('footer');
 			}
@@ -340,7 +366,8 @@ class Tuition extends MX_Controller {
 			
 			if($this->form_validation->run() == FALSE){
 				$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
-				$this->load->view('header');
+				$temp['title'] = 'Add Teacher';
+				$this->load->view('header',$temp);
 				$this->load->view('add-teacher',$data);
 				$this->load->view('footer');
 			}
@@ -370,7 +397,8 @@ class Tuition extends MX_Controller {
 		}
 		else {
 			$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
-			$this->load->view('header'); 
+			$temp['title'] = 'Add Teacher';
+			$this->load->view('header',$temp); 
 			$this->load->view('add-teacher',$data);
 			$this->load->view('footer');
 		}
@@ -383,7 +411,8 @@ class Tuition extends MX_Controller {
 		else {
 			$user_data = $this->Tuition_model->myQuery('SELECT * From `tuition_teacher` WHERE `tuition_id`='.$this->session->userdata('id'));
 			$data["class_data"] = $user_data;
-			$this->load->view('header'); 
+			$temp['title'] = 'Tuition Teacher List';
+			$this->load->view('header',$temp); 
 			$this->load->view('tuition-teacher-list',$data);
 			$this->load->view('footer');
 		}
@@ -398,7 +427,8 @@ class Tuition extends MX_Controller {
 			$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
 			$selected_class = explode('|',$data['teacher_class']);
 			$data['selected_class'] = $selected_class;
-			$this->load->view('header'); 
+			$temp['title'] = 'Update Teacher';
+			$this->load->view('header',$temp); 
 			$this->load->view('update-teacher',$data);
 			$this->load->view('footer');
 		}
@@ -424,7 +454,8 @@ class Tuition extends MX_Controller {
 				$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
 				$selected_class = explode('|',$data['teacher_class']);
 				$data['selected_class'] = $selected_class;
-				$this->load->view('header');
+				$temp['title'] = 'Update Teacher';
+				$this->load->view('header',$temp);
 				$this->load->view('update-teacher',$data);
 				$this->load->view('footer');
 			}
@@ -482,7 +513,8 @@ class Tuition extends MX_Controller {
 			$this->form_validation->set_rules('city','City','trim|required');
 			
 			if($this->form_validation->run() == FALSE){
-				$this->load->view('header');
+				$temp['title'] = 'Add Tuition Student';
+				$this->load->view('header',$temp);
 				$this->load->view('add-tuition-student');
 				$this->load->view('footer');
 			}
@@ -512,7 +544,8 @@ class Tuition extends MX_Controller {
 			}
 		}
 		else {
-			$this->load->view('header'); 
+			$temp['title'] = 'Add Tuition Student';
+			$this->load->view('header',$temp); 
 			$this->load->view('add-tuition-student');
 			$this->load->view('footer');
 		}
@@ -525,7 +558,8 @@ class Tuition extends MX_Controller {
 		else {
 			$user_data = $this->Tuition_model->myQuery('SELECT * From `tuition_student` WHERE `tuition_id`='.$this->session->userdata('id'));
 			$data["class_data"] = $user_data;
-			$this->load->view('header'); 
+			$temp['title'] = 'Tution Student List';
+			$this->load->view('header',$temp); 
 			$this->load->view('tuition-student-list',$data);
 			$this->load->view('footer');
 		}
@@ -537,7 +571,8 @@ class Tuition extends MX_Controller {
 		}
 		else {
 			$data = $this->Tuition_model->fatchOne('tuition_student','student_id',$id);
-			$this->load->view('header'); 
+			$temp['title'] = 'Update Student';
+			$this->load->view('header',$temp); 
 			$this->load->view('update-student',$data);
 			$this->load->view('footer');
 		}
@@ -561,7 +596,8 @@ class Tuition extends MX_Controller {
 			
 			if($this->form_validation->run() == FALSE){
 				$data = $this->Tuition_model->fatchOne('tuition_student','student_id',$id);
-				$this->load->view('header');
+				$temp['title'] = 'Update Student';
+				$this->load->view('header',$temp);
 				$this->load->view('update-student',$data);
 				$this->load->view('footer');
 			}
@@ -611,8 +647,11 @@ class Tuition extends MX_Controller {
 			$this->form_validation->set_rules('date','Date','trim|required');
 			$this->form_validation->set_rules('class','Class','trim|required');
 			
-			if($this->form_validation->run() == FALSE){
-				$this->load->view('header');
+			if($this->form_validation->run() == FALSE || $this->input->post('class') == '---Select Class---'){
+				$data['user_data'] ='';
+				$data['class'] ='';
+				$temp['title'] = 'Student Attendeance';
+				$this->load->view('header',$temp);
 				$this->load->view('student-attendance');
 				$this->load->view('footer');
 			}
@@ -621,34 +660,50 @@ class Tuition extends MX_Controller {
 				$arr = explode(',',$this->input->post('class'));
 				$data['class_name'] = $arr[0];
 				$data['medium'] = $arr[1];
-				if( $this->Tuition_model->myQuery(" SELECT `student_name` From `student_attendance` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' AND `date`='".$data['date']."' ORDER BY `timestamp`") ) {
+				if( $this->Tuition_model->myQuery(" SELECT * From `student_attendance` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' AND `date`='".$data['date']."' ORDER BY `timestamp`") ) {
 					$this->session->set_tempdata('error','Attendance Allready Taken',1);
 					redirect('student-attendance');
 				}
 				else {
 					$data['user_data'] = $this->Tuition_model->myQuery(" SELECT `student_fname`,`student_lname`,`student_class`,`student_medium`,`student_id` From `tuition_student` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' ORDER BY `timestamp`");
 					$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
-					$this->load->view('header'); 
+					$temp['title'] = 'Student Attendance';
+					$this->load->view('header',$temp); 
 					$this->load->view('student-attendance',$data);
 					$this->load->view('footer');
 				}
 			}
 		}
 		elseif(isset($_POST['submit'])) {
-
-			$user_data = $this->Tuition_model->myQuery(" SELECT `student_fname`,`student_lname`,`student_class`,`student_medium`,`student_id` From `tuition_student` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$this->input->post('class_name')."' AND `student_medium`='".$this->input->post('medium')."' ORDER BY `timestamp`");
-			for ($i=0; $i < sizeof($user_data); $i++) { 
-				$data = array(
-					'tuition_id' 		=> $this->session->userdata('id'),
-					'student_id' 		=> $user_data[$i]['student_id'],
-					'student_name' 		=> $user_data[$i]['student_lname'].' '.$user_data[$i]['student_fname'],
-					'student_class'		=> $user_data[$i]['student_class'],
-					'student_medium' 	=> $user_data[$i]['student_medium'],
-					'attendance_status' => $this->input->post($user_data[$i]['student_id']),
-					'date' 				=> $this->input->post('date')
-				);
-				$this->Tuition_model->insertData('student_attendance',$data);
+			
+			$date = $this->Tuition_model->myQuery(" SELECT `attendance_id`,`date` FROM `student_attendance` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$this->input->post('class_name')."' AND `student_medium`='".$this->input->post('medium')."' ORDER BY `timestamp`");
+			foreach ($date as $value) {
+				if(!(date('Y-m-d',strtotime('-1 Monday')) <= $value['date'])) {
+					$this->Tuition_model->deleteData('student_attendance','attendance_id',$value['attendance_id']);
+				}
 			}
+			$student_data = $this->Tuition_model->myQuery(" SELECT `total_days`,`present_days`,`student_id` From `tuition_student` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$this->input->post('class_name')."' AND `student_medium`='".$this->input->post('medium')."' ORDER BY `timestamp`");
+			foreach ($student_data as $student) {
+				$data = array(
+					'total_days' => $student['total_days']+1
+				);
+				$this->Tuition_model->updateData('tuition_student','student_id',$student['student_id'],$data);
+			}
+			foreach ($this->input->post('status') as $student_id) {
+				$student = $this->Tuition_model->fatchOne('tuition_student','student_id',$student_id);
+				$data = array(
+					'present_days' => $student['present_days']+1
+				);
+				$this->Tuition_model->updateData('tuition_student','student_id',$student['student_id'],$data);
+			}
+			$data = array(
+				'tuition_id' 		=> $this->session->userdata('id'),
+				'student_class'		=> $this->input->post('class_name'),
+				'student_medium' 	=> $this->input->post('medium'),
+				'attendance_status' => implode(',',$this->input->post('status')),
+				'date' 				=> $this->input->post('date')
+			);
+			$this->Tuition_model->insertData('student_attendance',$data);
 			$this->session->set_tempdata('success','Attendance Taken Successfully',1);
 			redirect('student-attendance');
 			
@@ -656,7 +711,8 @@ class Tuition extends MX_Controller {
 		else {
 			$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
 			$data['user_data'] = 0;
-			$this->load->view('header'); 
+			$temp['title'] = 'Student Attendance';
+			$this->load->view('header',$temp); 
 			$this->load->view('student-attendance',$data);
 			$this->load->view('footer');
 		}
@@ -683,7 +739,8 @@ class Tuition extends MX_Controller {
 		}
 		else {
 			$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
-			$this->load->view('header'); 
+			$temp['title'] = 'Announcements';
+			$this->load->view('header',$temp); 
 			$this->load->view('announcements',$data);
 			$this->load->view('footer');
 		}
@@ -702,17 +759,19 @@ class Tuition extends MX_Controller {
 			
 			if($this->form_validation->run() == FALSE){
 				$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
-				$data['attendance_data'] = 0;
-				$this->load->view('header');
+				$data['student_data'] = 0;
+				$temp['title'] = 'View Student Attendance';
+				$this->load->view('header',$temp);
 				$this->load->view('view-student-attendance',$data);
 				$this->load->view('footer');
 			}
 			else {
 
 				$arr = explode(',',$this->input->post('class'));
-				if( $data['attendance_data'] = $this->Tuition_model->myQuery("SELECT * FROM `student_attendance` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' ORDER BY `timestamp`") ) {
+				if( $data['student_data'] = $this->Tuition_model->myQuery("SELECT * FROM `tuition_student` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' ORDER BY `timestamp`") ) {
 					$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
-					$this->load->view('header');
+					$temp['title'] = 'View Student Attendance';
+					$this->load->view('header',$temp);
 					$this->load->view('view-student-attendance',$data);
 					$this->load->view('footer');
 				}
@@ -725,12 +784,24 @@ class Tuition extends MX_Controller {
 		else {
 
 			$data['class'] = $this->Tuition_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
-			$data['attendance_data'] = 0;
-			$this->load->view('header'); 
+			$data['student_data'] = 0;
+			$temp['title'] = 'View Student Attendance';
+			$this->load->view('header',$temp); 
 			$this->load->view('view-student-attendance',$data);
 			$this->load->view('footer');
 		}
 
 	}
 
+	public function viewattendance($id) {
+		if(!$this->session->has_userdata('id')) {
+			redirect('tuition-sign-in');
+		}
+		else {
+			$student_attendance = $this->Tuition_model->fatchOne('tuition_student','student_id',$id);
+			$this->load->view('header');
+			$this->load->view('view-attendance',$student_attendance);
+			$this->load->view('footer');
+		}
+	}
 } 

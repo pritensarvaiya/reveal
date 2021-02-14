@@ -24,7 +24,8 @@
         <a href="<?php echo site_url('teacher/teacher-dashboard'); ?>" class="w3-bar-item w3-button">Dashboard</a>
         <a href="<?php echo site_url('teacher/edit-teacher-profile'); ?>" class="w3-bar-item w3-button">Edit Profile</a>
         <a href="<?php echo site_url('teacher/student-attendance'); ?>" class="w3-bar-item w3-button">Attendance</a>
-        <a href="<?php echo site_url('teacher/view-student-attendance'); ?>" class="w3-bar-item w3-button active-menu">View Attendance</a>
+        <a href="<?php echo site_url('teacher/view-student-attendance'); ?>"
+            class="w3-bar-item w3-button active-menu">View Attendance</a>
         <a href="<?php echo site_url('teacher/student-list'); ?>" class="w3-bar-item w3-button">Students List</a>
         <a href="<?php echo site_url('teacher/teacher-query'); ?>" class="w3-bar-item w3-button">Query</a>
         <a href="<?php echo site_url('teacher/change-password'); ?>" class="w3-bar-item w3-button">Change Password</a>
@@ -47,14 +48,14 @@
 
                 <div class="container">
                     <?php if($error = $this->session->tempdata('error')) { ?>
-                        <div class='alert alert-danger'>
-                            <?php echo $error; ?>
-                        </div>
+                    <div class='alert alert-danger'>
+                        <?php echo $error; ?>
+                    </div>
                     <?php } ?>
                     <?php if($success = $this->session->tempdata('success')) { ?>
-                        <div class='alert alert-success'>
-                            <?php echo $success; ?>
-                        </div>
+                    <div class='alert alert-success'>
+                        <?php echo $success; ?>
+                    </div>
                     <?php } ?>
                     <form action="<?php echo site_url('teacher/view-student-attendance'); ?>" method="POST">
                         <div class="row">
@@ -73,11 +74,11 @@
                         </div><br />
                         <button type="submit" name="get" class="btn btn-primary">Get</button>
                     </form>
-                    <?php if($attendance_data): ?>
+                    <?php if($student_data): ?>
                     <div class="card my-5">
                         <div class="card-header">
                             <ul class="nav nav-pills card-header-pills">
-                                
+
                             </ul>
                         </div>
                         <div class="card-body">
@@ -87,32 +88,38 @@
                                         <tr>
                                             <th>Sr.no</th>
                                             <th>Student Name</th>
-                                            <th>Class</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
+                                            <th>Gender</th>
+                                            <th>Number</th>
+                                            <th>Attendance %</th>
+                                            <th>View</th>
                                         </tr>
 
                                     </thead>
                                     <tbody>
                                         <?php $i=1; ?>
-                                        <?php  foreach ($attendance_data as $value) { ?>
-                                            <tr>
-                                                <td>
-                                                    <?php echo $i; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $value['student_name']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $value['student_class'].' '.$value['student_medium']; ?>
-                                                </td>
-                                                <td>
-                                                    <font <?php if($value['attendance_status'] == 'Present') { echo "color='green'";}elseif($value['attendance_status'] == 'Absent') { echo "color='red'";}?>><?php echo $value['attendance_status']; ?></font>
-                                                </td>
-                                                <td>
-                                                    <?php $value['date']=date_create($value['date']); echo date_format($value['date'],"d-m-Y"); ?>
-                                                </td>
-                                            </tr>
+                                        <?php  foreach ($student_data as $value) { ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $i; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $value['student_fname'].' '.$value['student_lname']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $value['student_gender']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $value['student_number']; ?>
+                                            </td>
+                                            <td>
+                                                <?php if($value['total_days']==0){echo '0';}else{echo round((100*$value['present_days'])/$value['total_days'],2);} ?>
+                                            </td>
+                                            <td>
+                                                <a href="Teacher/viewattendance/<?=$value['student_id']?>"><img
+                                                        src="<?= base_url('assets/img/view.png') ?>" class="img-fluid"
+                                                        style="width: 40px"></a>
+                                            </td>
+                                        </tr>
                                         <?php $i++; ?>
                                         <?php }  ?>
                                     </tbody>
@@ -127,11 +134,11 @@
     </div>
 
     <script>
-      function w3_open() {
-        document.getElementById("mySidebar").style.display = "block";
-      }
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+        }
 
-      function w3_close() {
-        document.getElementById("mySidebar").style.display = "none";
-      }
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
     </script>

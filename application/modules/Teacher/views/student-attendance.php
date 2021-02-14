@@ -63,7 +63,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Select Date :</label>
-                                    <input type="text" id="datepicker" placeholder="---Select Date---" autocomplete="off" class="form-control" name="date" value="<?php if(isset($date)){ echo $date; } ?>">
+                                    <input type="text" id="datepicker" placeholder="---Select Date---"
+                                        autocomplete="off" class="form-control" name="date"
+                                        value="<?php if(isset($date)){ echo $date; } ?>">
                                     <div class="text-danger my-1 err">
                                         <?php echo form_error('date'); ?>
                                     </div>
@@ -117,10 +119,16 @@
                                         <td>
                                             <?= $value['student_medium'] ?>
                                         </td>
-                                        <td><input type="radio" name="<?= $value['student_id'] ?>" value="Present">
-                                            Present
-                                            &nbsp;<input type="radio" name="<?= $value['student_id'] ?>" value="Absent"
-                                                checked> Absent
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="status[]" checked
+                                                    value="<?= $value['student_id'] ?>" id="myCheck<?= $i ?>"
+                                                    onclick="myFunction(<?= $i ?>)">
+                                                <div class="ml-4 ">
+                                                    <img src="<?= base_url('assets/img/present.png') ?>"
+                                                        id="text<?= $i ?>" class="img-fluid" style="width: 30px">
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -137,6 +145,20 @@
     </div>
 
     <script>
+         function myFunction($id) {
+        
+            // Get the checkbox
+            var checkBox = document.getElementById("myCheck"+$id);
+            // Get the output text
+            var text = "text";
+
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true){
+                document.getElementById(text.concat($id)).src = "../assets/img/present.png";
+            } else {
+                document.getElementById(text.concat($id)).src = "../assets/img/apsent.png";
+            }
+        }
         function w3_open() {
             document.getElementById("mySidebar").style.display = "block";
         }

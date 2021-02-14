@@ -11,11 +11,12 @@ class Teacher extends MX_Controller {
     public function index() {
       
       if($this->session->has_userdata('teacher_id')) {
-          $tuition_data = $this->Teacher_model->myQuery('SELECT `tuition_name`,`tuition_img` FROM `tuition_head` WHERE `tuition_id`='.$this->session->userdata('tuition_id'));
+          $tuition_data = $this->Teacher_model->myQuery('SELECT `tuition_name` FROM `tuition_head` WHERE `tuition_id`='.$this->session->userdata('tuition_id'));
           $user_data = $this->Teacher_model->fatchOne('tuition_teacher','teacher_id',$this->session->userdata('teacher_id'));
           $data['tuition_data'] = $tuition_data;
           $data['teacher_data'] = $user_data;
-          $this->load->view('header');
+          $temp['title'] = 'Teacher Dashboard';
+			    $this->load->view('header',$temp);
           $this->load->view('teacher-dashboard',$data);
           $this->load->view('footer');
       }
@@ -49,7 +50,8 @@ class Teacher extends MX_Controller {
         }
       }
       else {
-        $this->load->view('header');
+        $temp['title'] = 'Teacher Login';
+			  $this->load->view('header',$temp);
         $this->load->view('teacher-login');
         $this->load->view('footer');
       }
@@ -62,12 +64,13 @@ class Teacher extends MX_Controller {
           redirect('teacher/teacher-sign-in');
         }
         else {
-          $tuition_data = $this->Teacher_model->myQuery('SELECT `tuition_name`,`tuition_img` FROM `tuition_head` WHERE `tuition_id`='.$this->session->userdata('tuition_id'));
+          $tuition_data = $this->Teacher_model->myQuery('SELECT `tuition_name` FROM `tuition_head` WHERE `tuition_id`='.$this->session->userdata('tuition_id'));
           $user_data = $this->Teacher_model->fatchOne('tuition_teacher','teacher_id',$this->session->userdata('teacher_id'));
           $data['tuition_data'] = $tuition_data;
           $data['teacher_data'] = $user_data;
           
-          $this->load->view('header');
+          $temp['title'] = 'Teacher Dashboard';
+			    $this->load->view('header',$temp);
           $this->load->view('teacher-dashboard',$data);
           $this->load->view('footer');
         }
@@ -107,7 +110,8 @@ class Teacher extends MX_Controller {
           $this->form_validation->set_rules('city','City','trim|required');
           
           if($this->form_validation->run() == FALSE){
-            $this->load->view('header');
+            $temp['title'] = 'Edit Teacher Profile';
+			      $this->load->view('header',$temp);
             $this->load->view('teacher/edit-teacher-profile');
             $this->load->view('footer');
           }
@@ -134,7 +138,8 @@ class Teacher extends MX_Controller {
       else {
 
         $data = $this->Teacher_model->fatchOne('tuition_teacher','teacher_id',$this->session->userdata('teacher_id'));
-        $this->load->view('header');
+        $temp['title'] = 'Edit Tuition Teacher';
+			  $this->load->view('header',$temp);
         $this->load->view('edit-tuition-teacher',$data);
         $this->load->view('footer');
 
@@ -157,7 +162,8 @@ class Teacher extends MX_Controller {
               $data['class'] = $this->Teacher_model->myQuery("SELECT `teacher_class` FROM `tuition_teacher` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `teacher_id`=".$this->session->userdata('teacher_id'));
               $data['class'] = explode('|',$data['class'][0]['teacher_class']);
               $data['user_data'] = 0;
-              $this->load->view('header');
+              $temp['title'] = 'Student Attendance';
+			        $this->load->view('header',$temp);
               $this->load->view('teacher/student-attendance',$data);
               $this->load->view('footer');
             }
@@ -166,15 +172,16 @@ class Teacher extends MX_Controller {
               $arr = explode(',',$this->input->post('class'));
               $data['class_name'] = $arr[0];
               $data['medium'] = $arr[1];
-              if( $this->Teacher_model->myQuery(" SELECT `student_name` From `student_attendance` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' AND `date`='".$data['date']."' ORDER BY `timestamp`") ) {
+              if( $this->Teacher_model->myQuery(" SELECT * From `student_attendance` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' AND `date`='".$data['date']."' ORDER BY `timestamp`") ) {
                 $this->session->set_tempdata('error','Attendance Allready Taken',1);
                 redirect('teacher/student-attendance');
               }
               else {
-                $data['user_data'] = $this->Teacher_model->myQuery(" SELECT `student_fname`,`student_lname`,`student_class`,`student_medium`,`student_id` From `tuition_student` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' ORDER BY `timestamp`");
+                $data['user_data'] = $this->Teacher_model->myQuery(" SELECT `student_fname`,`student_lname`,`student_class`,`student_medium`,`student_id` From `tuition_student` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' ORDER BY `timestamp`");
                 $data['class'] = $this->Teacher_model->myQuery("SELECT `teacher_class` FROM `tuition_teacher` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `teacher_id`=".$this->session->userdata('teacher_id'));
                 $data['class'] = explode('|',$data['class'][0]['teacher_class']);
-                $this->load->view('header'); 
+                $temp['title'] = 'Student Attendance';
+			          $this->load->view('header',$temp); 
                 $this->load->view('student-attendance',$data);
                 $this->load->view('footer');
               }
@@ -182,28 +189,44 @@ class Teacher extends MX_Controller {
         }
         elseif(isset($_POST['submit'])) {
 
-          $user_data = $this->Teacher_model->myQuery(" SELECT `student_fname`,`student_lname`,`student_class`,`student_medium`,`student_id` From `tuition_student` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `student_class`='".$this->input->post('class_name')."' AND `student_medium`='".$this->input->post('medium')."' ORDER BY `timestamp`");
-          for ($i=0; $i < sizeof($user_data); $i++) { 
+            $date = $this->Teacher_model->myQuery(" SELECT `attendance_id`,`date` FROM `student_attendance` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$this->input->post('class_name')."' AND `student_medium`='".$this->input->post('medium')."' ORDER BY `timestamp`");
+            foreach ($date as $value) {
+              if(!(date('Y-m-d',strtotime('-1 Monday')) <= $value['date'])) {
+                $this->Teacher_model->deleteData('student_attendance','attendance_id',$value['attendance_id']);
+              }
+            }
+            $student_data = $this->Teacher_model->myQuery(" SELECT `total_days`,`present_days`,`student_id` From `tuition_student` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$this->input->post('class_name')."' AND `student_medium`='".$this->input->post('medium')."' ORDER BY `timestamp`");
+            foreach ($student_data as $student) {
+              $data = array(
+                'total_days' => $student['total_days']+1
+              );
+              $this->Teacher_model->updateData('tuition_student','student_id',$student['student_id'],$data);
+            }
+            foreach ($this->input->post('status') as $student_id) {
+              $student = $this->Teacher_model->fatchOne('tuition_student','student_id',$student_id);
+              $data = array(
+                'present_days' => $student['present_days']+1
+              );
+              $this->Teacher_model->updateData('tuition_student','student_id',$student['student_id'],$data);
+            }
             $data = array(
-              'tuition_id' 		=> $this->session->userdata('tuition_id'),
-              'student_id' 		=> $user_data[$i]['student_id'],
-              'student_name' 		=> $user_data[$i]['student_lname'].' '.$user_data[$i]['student_fname'],
-              'student_class'		=> $user_data[$i]['student_class'],
-              'student_medium' 	=> $user_data[$i]['student_medium'],
-              'attendance_status' => $this->input->post($user_data[$i]['student_id']),
+              'tuition_id' 		=> $this->session->userdata('id'),
+              'student_class'		=> $this->input->post('class_name'),
+              'student_medium' 	=> $this->input->post('medium'),
+              'attendance_status' => implode(',',$this->input->post('status')),
               'date' 				=> $this->input->post('date')
             );
             $this->Teacher_model->insertData('student_attendance',$data);
-          }
-          $this->session->set_tempdata('success','Attendance Taken Successfully',1);
-          redirect('teacher/student-attendance');
+            $this->session->set_tempdata('success','Attendance Taken Successfully',1);
+            redirect('teacher/student-attendance');
           
         }
         else {
           $data['class'] = $this->Teacher_model->myQuery("SELECT `teacher_class` FROM `tuition_teacher` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `teacher_id`=".$this->session->userdata('teacher_id'));
           $data['class'] = explode('|',$data['class'][0]['teacher_class']);
           $data['user_data'] = 0;
-          $this->load->view('header'); 
+          $temp['title'] = 'Student Attendance';
+			    $this->load->view('header',$temp); 
 			    $this->load->view('student-attendance',$data);
 			    $this->load->view('footer');
         }
@@ -221,18 +244,19 @@ class Teacher extends MX_Controller {
           if($this->form_validation->run() == FALSE){
             $data['class'] = $this->Teacher_model->myQuery("SELECT `teacher_class` FROM `tuition_teacher` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `teacher_id`=".$this->session->userdata('teacher_id'));
             $data['class'] = explode('|',$data['class'][0]['teacher_class']);
-            $data['attendance_data'] = 0;
-            $this->load->view('header');
+            $data['student_data'] = 0;
+            $temp['title'] = 'View Student Attendance';
+			      $this->load->view('header',$temp);
             $this->load->view('view-student-attendance',$data);
             $this->load->view('footer');
           }
           else {
 
             $arr = explode(',',$this->input->post('class'));
-            if( $data['attendance_data'] = $this->Teacher_model->myQuery("SELECT * FROM `student_attendance` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' ORDER BY `timestamp`") ) {
-              $data['class'] = $this->Teacher_model->myQuery("SELECT `teacher_class` FROM `tuition_teacher` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `teacher_id`=".$this->session->userdata('teacher_id'));
-              $data['class'] = explode('|',$data['class'][0]['teacher_class']);
-              $this->load->view('header');
+            if( $data['student_data'] = $this->Teacher_model->myQuery("SELECT * FROM `tuition_student` WHERE `tuition_id`=".$this->session->userdata('id')." AND `student_class`='".$arr[0]."' AND `student_medium`='".$arr[1]."' ORDER BY `timestamp`") ) {
+              $data['class'] = $this->Teacher_model->myQuery('SELECT `class_name`,`medium` From `tuition_class` WHERE `tuition_id`='.$this->session->userdata('id').' ORDER BY `class_name`');
+              $temp['title'] = 'View Student Attendance';
+              $this->load->view('header',$temp);
               $this->load->view('view-student-attendance',$data);
               $this->load->view('footer');
             }
@@ -245,13 +269,26 @@ class Teacher extends MX_Controller {
       else {
         $data['class'] = $this->Teacher_model->myQuery("SELECT `teacher_class` FROM `tuition_teacher` WHERE `tuition_id`=".$this->session->userdata('tuition_id')." AND `teacher_id`=".$this->session->userdata('teacher_id'));
         $data['class'] = explode('|',$data['class'][0]['teacher_class']);
-        $data['attendance_data'] = 0;
-        $this->load->view('header'); 
+        $data['student_data'] = 0;
+        $temp['title'] = 'View Student Attendance';
+			  $this->load->view('header',$temp); 
 			  $this->load->view('view-student-attendance',$data);
 			  $this->load->view('footer');
       }
     }
 
+    public function viewattendance($id) {
+
+      if(!$this->session->has_userdata('teacher_id')) {
+        redirect('teacher/teacher-sign-in');
+      }
+      else {
+        $student_attendance = $this->Teacher_model->fatchOne('tuition_student','student_id',$id);
+        $this->load->view('header');
+        $this->load->view('view-attendance',$student_attendance);
+        $this->load->view('footer');
+      }
+    }
     public function studentList() {
 
       if(!$this->session->has_userdata('teacher_id')) {
@@ -260,7 +297,8 @@ class Teacher extends MX_Controller {
       else {
         $user_data = $this->Teacher_model->myQuery('SELECT * From `tuition_student` WHERE `tuition_id`='.$this->session->userdata('tuition_id'));
         $data["class_data"] = $user_data;
-        $this->load->view('header'); 
+        $temp['title'] = 'Tuition Student List';
+			  $this->load->view('header',$temp); 
         $this->load->view('tuition-student-list',$data);
         $this->load->view('footer');
       }
@@ -288,7 +326,8 @@ class Teacher extends MX_Controller {
         }
         else {
 
-          $this->load->view('header'); 
+          $temp['title'] = 'Teacher Query';
+          $this->load->view('header',$temp); 
           $this->load->view('teacher-query');
           $this->load->view('footer');
         }
@@ -307,7 +346,8 @@ class Teacher extends MX_Controller {
             $this->form_validation->set_rules('conf_new_password', 'Confirm Password', 'trim|required|matches[new_password]');
             
             if($this->form_validation->run() == FALSE){
-              $this->load->view('header');
+              $temp['title'] = 'Change Password';
+			        $this->load->view('header',$temp);
               $this->load->view('change-password');
               $this->load->view('footer');
             }
@@ -329,7 +369,8 @@ class Teacher extends MX_Controller {
             }
         }
         else {
-            $this->load->view('header'); 
+            $temp['title'] = 'Change Password';
+            $this->load->view('header',$temp); 
             $this->load->view('change-password');
             $this->load->view('footer');
         }

@@ -16,17 +16,28 @@
     <script src="<?php echo base_url('assets/vendor/hoverIntent/hoverIntent.js') ?>"></script>
     <!-- Template Main JS File -->
     <script src="<?php echo base_url('assets/js/main.js') ?>"></script>
-    <script>
-    $(document).ready(function(){
-	   $("#myTable").dataTable();
-       $( "#datepicker" ).datepicker({
-            dateFormat : 'yy-mm-dd',
-            showAnim   : 'fold',
-            changeMonth:  true,
-            changeYear :  true,
-            maxDate    :  0
-       });
-	});
+    <script>      
+        $(document).ready(function(){
+            $("#myTable").dataTable();
+            $( "#datepicker" ).datepicker({
+                    dateFormat : 'yy-mm-dd',
+                    showAnim   : 'fold',
+                    changeMonth:  true,
+                    maxDate    :  0,
+                    beforeShowDay: function(date) {
+                        var day = date.getDay();
+                        return [day != 0,''];
+                    }
+            });
+            var $ppc = $('.progress-pie-chart'),
+                percent = parseInt($ppc.data('percent')),
+                deg = 360 * percent / 100;
+            if (percent > 50) {
+                $ppc.addClass('gt-50');
+            }
+            $('.ppc-progress-fill').css('transform', 'rotate(' + deg + 'deg)');
+            $('.ppc-percents span').html(percent + '%');
+        });
     </script>
     
 </body>

@@ -15,7 +15,8 @@ class Admin extends MX_Controller {
             $data['count_teacher'] = sizeof($this->Admin_model->fatchAll('tuition_teacher'));
             $data['count_student'] = sizeof($this->Admin_model->fatchAll('tuition_student'));
             $data['admin_data']    = $this->Admin_model->fatchOne('admin','admin_id',$this->session->userdata('admin_id'));
-            $this->load->view('header');
+            $temp['title'] = 'Dashboard';
+			$this->load->view('header',$temp);
         	$this->load->view('dashboard',$data);
         	$this->load->view('footer');
 		}
@@ -39,7 +40,8 @@ class Admin extends MX_Controller {
 			}
 		}
 		else {
-			$this->load->view('header');
+			$temp['title'] = 'Admin Sign In';
+			  $this->load->view('header',$temp);
         	$this->load->view('admin-sign-in');
         	$this->load->view('footer');
 		}
@@ -55,7 +57,8 @@ class Admin extends MX_Controller {
             $data['count_teacher'] 		= sizeof($this->Admin_model->fatchAll('tuition_teacher'));
             $data['count_student'] 		= sizeof($this->Admin_model->fatchAll('tuition_student'));
             $data['admin_data']    		= $this->Admin_model->fatchOne('admin','admin_id',$this->session->userdata('admin_id'));
-            $this->load->view('header');
+            $temp['title'] = 'Dashboard';
+			  $this->load->view('header',$temp);
         	$this->load->view('dashboard',$data);
         	$this->load->view('footer');
         }
@@ -92,7 +95,8 @@ class Admin extends MX_Controller {
 		}
 		else {
 			$data = $this->Admin_model->fatchOne('admin','admin_id',$this->session->userdata('admin_id'));
-			$this->load->view('header');
+			$temp['title'] = 'Edit Admin';
+			$this->load->view('header',$temp);
 			$this->load->view('edit-admin',$data);
 			$this->load->view('footer');
 		}
@@ -104,7 +108,8 @@ class Admin extends MX_Controller {
 		}
 		else {
 			$tuition['data'] = $this->Admin_model->fatchAll('tuition_head');
-			$this->load->view('header');
+			$temp['title'] = 'View Tuition List';
+			$this->load->view('header',$temp);
 			$this->load->view('view-tuition-list',$tuition);
 			$this->load->view('footer');
 		}
@@ -116,7 +121,8 @@ class Admin extends MX_Controller {
 		}
 		else {
 			$teacher['data'] = $this->Admin_model->myQuery("SELECT * FROM `tuition_teacher` ORDER BY `tuition_id` ");
-			$this->load->view('header');
+			$temp['title'] = 'View Tuition List';
+			  $this->load->view('header',$temp);
 			$this->load->view('view-teacher-list',$teacher);
 			$this->load->view('footer');
 		}
@@ -128,7 +134,8 @@ class Admin extends MX_Controller {
 		}
 		else {
 			$student['data'] = $this->Admin_model->myQuery("SELECT * FROM `tuition_student` ORDER BY `tuition_id` ");
-			$this->load->view('header');
+			$temp['title'] = 'View Student List';
+			$this->load->view('header',$temp);
 			$this->load->view('view-student-list',$student);
 			$this->load->view('footer');
 		}
@@ -146,7 +153,8 @@ class Admin extends MX_Controller {
             $this->form_validation->set_rules('conf_new_password', 'Confirm Password', 'trim|required|matches[new_password]');
             
             if($this->form_validation->run() == FALSE){
-              $this->load->view('header');
+				$temp['title'] = 'Change Password';
+				$this->load->view('header',$temp);
               $this->load->view('change-password');
               $this->load->view('footer');
             }
@@ -168,7 +176,8 @@ class Admin extends MX_Controller {
             }
         }
 		else {
-            $this->load->view('header'); 
+            $temp['title'] = 'Change Password';
+			  $this->load->view('header',$temp); 
             $this->load->view('change-password');
             $this->load->view('footer');
         }
@@ -180,7 +189,8 @@ class Admin extends MX_Controller {
 		}
 		else {
 			$contact['data'] = $this->Admin_model->fatchAll('contact_us');
-			$this->load->view('header'); 
+			$temp['title'] = 'View All Message';
+			  $this->load->view('header',$temp); 
             $this->load->view('view-all-message',$contact);
             $this->load->view('footer');
 		}
@@ -192,7 +202,8 @@ class Admin extends MX_Controller {
 		}
 		else {
 			$data = $this->Admin_model->fatchOne('contact_us','id',$id);
-			$this->load->view('header'); 
+			$temp['title'] = 'View Message';
+			  $this->load->view('header',$temp); 
             $this->load->view('view-message',$data);
             $this->load->view('footer');
 		}

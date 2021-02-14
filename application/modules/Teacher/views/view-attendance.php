@@ -13,7 +13,7 @@
                 <!-- Uncomment below if you prefer to use an image logo -->
                 <!-- <a href="#topbar"><img src="assets/img/logo.png" alt=""></a>-->
             </div>
-            <a href="<?php echo site_url('student/student-logout'); ?>"><button
+            <a href="<?php echo site_url('teacher/teacher-logout'); ?>"><button
                     class="btn btn-outline-danger logout">Logout</button></a>
         </div>
     </header><!-- End Header  class="menu-active" -->
@@ -21,13 +21,13 @@
     <div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-left"
         style="width:200px; box-shadow: 0.50px 4px 10px 0.50px #cccccc;" id="mySidebar">
         <button class="w3-bar-item w3-button w3-large w3-hide-large" onclick="w3_close()">&times;</button>
-        <a href="<?php echo site_url('student/student-dashboard'); ?>" class="w3-bar-item w3-button">Dashboard</a>
-        <a href="<?php echo site_url('student/edit-student-profile'); ?>" class="w3-bar-item w3-button">Edit Profile</a>
-        <a href="<?php echo site_url('student/view-student-attendance'); ?>"
-            class="w3-bar-item w3-button active-menu">View Attendance</a>
-        <a href="<?php echo site_url('student/view-announcements'); ?>" class="w3-bar-item w3-button">Announcements</a>
-        <a href="<?php echo site_url('student/student-query'); ?>" class="w3-bar-item w3-button">Query</a>
-        <a href="<?php echo site_url('student/change-password'); ?>" class="w3-bar-item w3-button">Change Password</a>
+        <a href="<?php echo site_url('teacher/teacher-dashboard'); ?>" class="w3-bar-item w3-button">Dashboard</a>
+        <a href="<?php echo site_url('teacher/edit-teacher-profile'); ?>" class="w3-bar-item w3-button">Edit Profile</a>
+        <a href="<?php echo site_url('teacher/student-attendance'); ?>" class="w3-bar-item w3-button">Attendance</a>
+        <a href="<?php echo site_url('teacher/view-student-attendance'); ?>" class="w3-bar-item w3-button active-menu">View Attendance</a>
+        <a href="<?php echo site_url('teacher/student-list'); ?>" class="w3-bar-item w3-button">Students List</a>
+        <a href="<?php echo site_url('teacher/teacher-query'); ?>" class="w3-bar-item w3-button">Query</a>
+        <a href="<?php echo site_url('teacher/change-password'); ?>" class="w3-bar-item w3-button">Change Password</a>
     </div>
 
     <div class="w3-main" style="margin-left:200px">
@@ -41,7 +41,7 @@
                 <!-- Page Heading -->
                 <ol class="breadcrumb mb-4 mt-md-4">
                     <li class="breadcrumb-item active">
-                        <h2 class="mt-4">View Attendance</h2>
+                        <h2 class="mt-4"><?= "Attendance of ".$student_fname.' '.$student_lname ?></h2>
                     </li>
                 </ol>
 
@@ -87,17 +87,16 @@
                         </div>
                     </div>
                 </div>
-
             </main>
         </div>
     </div>
-
+    <script type="text/javascript" src="<?= base_url('assets/media/js/loader.js') ?>"></script>
     <script>
-        function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-        }
+      function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+      }
 
-        function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-        }
+      function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+      }
     </script>
